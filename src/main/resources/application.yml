@@ -1,0 +1,16 @@
+spring:
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: false
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+jwt:
+  secret:
+    key: SUpZQkM1NjhBTkd2UXhaaVZ2eGpPRnpoQ2w1MkJTVG5EZlJLaU4=
