@@ -30,16 +30,9 @@ public class AuthService {
         }
 
         String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
-
         UserRole userRole = UserRole.of(signupRequest.getUserRole());
-
-        User newUser = new User(
-                signupRequest.getEmail(),
-                encodedPassword,
-                userRole
-        );
+        User newUser = new User(signupRequest.getEmail(), encodedPassword, userRole);
         User savedUser = userRepository.save(newUser);
-
         String bearerToken = jwtUtil.createToken(savedUser.getId(), savedUser.getEmail(), userRole);
 
         return new SignupResponse(bearerToken);
