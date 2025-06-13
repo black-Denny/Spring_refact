@@ -11,13 +11,11 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface TodoRepository extends JpaRepository<Todo, Long> {
-    @Query("SELECT t FROM Todo t LEFT JOIN FETCH t.user u ORDER BY t.modifiedAt DESC")
+    @EntityGraph(attributePaths = {"user"})
     Page<Todo> findAllByOrderByModifiedAtDesc(Pageable pageable);
 
-    @Query("SELECT t FROM Todo t " +
-            "LEFT JOIN FETCH t.user " +
-            "WHERE t.id = :todoId")
-    Optional<Todo> findByIdWithUser(@Param("todoId") Long todoId);
+    @EntityGraph(attributePaths = {"user"})
+    Optional<Todo> findById(Long id);
 
 
 
