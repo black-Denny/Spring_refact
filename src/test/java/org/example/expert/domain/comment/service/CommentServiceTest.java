@@ -35,20 +35,21 @@ class CommentServiceTest {
     private CommentService commentService;
 
     @Test
-    public void comment_등록_중_할일을_찾지_못해_에러가_발생한다() {
+    void comment_등록_중_Todo가_없으면_InvalidRequestException을_던진다() {
         // given
-        long todoId = 1;
+        long todoId = 1L;
         CommentSaveRequest request = new CommentSaveRequest("contents");
         AuthUser authUser = new AuthUser(1L, "email", UserRole.USER);
 
-        given(todoRepository.findById(anyLong())).willReturn(Optional.empty());
+        given(todoRepository.findById(anyLong()))
+                .willReturn(Optional.empty());
 
-        // when
-        InvalidRequestException exception = assertThrows(InvalidRequestException.class, () -> {
-            commentService.saveComment(authUser, todoId, request);
-        });
+        // when & then
+        InvalidRequestException exception = assertThrows(
+                InvalidRequestException.class,
+                () -> commentService.saveComment(authUser, todoId, request)
+        );
 
-        // then
         assertEquals("Todo not found", exception.getMessage());
     }
 
