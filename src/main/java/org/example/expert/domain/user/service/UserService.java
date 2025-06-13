@@ -24,18 +24,18 @@ public class UserService {
     }
 
     @Transactional
-    public void changePassword(long userId, UserChangePasswordRequest userChangePasswordRequest) {
+    public void changePassword(long userId, UserChangePasswordRequest req) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new InvalidRequestException("User not found"));
 
-        if (passwordEncoder.matches(userChangePasswordRequest.getNewPassword(), user.getPassword())) {
+        // DTO 검증이 이미 통과했으므로 여기서는 비즈니스 로직만
+        if (passwordEncoder.matches(req.getNewPassword(), user.getPassword())) {
             throw new InvalidRequestException("새 비밀번호는 기존 비밀번호와 같을 수 없습니다.");
         }
-
-        if (!passwordEncoder.matches(userChangePasswordRequest.getOldPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(req.getOldPassword(), user.getPassword())) {
             throw new InvalidRequestException("잘못된 비밀번호입니다.");
         }
 
-        user.changePassword(passwordEncoder.encode(userChangePasswordRequest.getNewPassword()));
+        user.changePassword(passwordEncoder.encode(req.getNewPassword()));
     }
 }
